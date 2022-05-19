@@ -21,7 +21,7 @@ class InfoViewController: UIViewController {
           alertButton.center = view.center
           alertButton.setTitle("Изменить", for: .normal)
           alertButton.backgroundColor = .darkGray
-          alertButton.layer.cornerRadius = 10
+          alertButton.layer.cornerRadius = 4
           alertButton.addTarget(self, action: #selector(tapAlertAction), for: .touchUpInside)
           view.addSubview(alertButton)
       }

@@ -25,7 +25,7 @@ class FeedViewController: UIViewController {
             button.center = view.center
             button.setTitle("К публикации", for: .normal)
             button.backgroundColor = .systemGray
-            button.layer.cornerRadius = 10
+            button.layer.cornerRadius = 4
             button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
         
             view.addSubview(button)

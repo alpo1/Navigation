@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D9152E922833597E001D0AAF /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9152E912833597E001D0AAF /* ProfileHeaderView.swift */; };
 		D920FC59283243C50005DC53 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D920FC58283243C50005DC53 /* AppDelegate.swift */; };
 		D920FC5B283243C50005DC53 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D920FC5A283243C50005DC53 /* SceneDelegate.swift */; };
 		D920FC60283243C50005DC53 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D920FC5E283243C50005DC53 /* Main.storyboard */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D9152E912833597E001D0AAF /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		D920FC55283243C50005DC53 /* Navigation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Navigation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D920FC58283243C50005DC53 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D920FC5A283243C50005DC53 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -45,6 +47,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D9152E90283358BD001D0AAF /*  Profile */ = {
+			isa = PBXGroup;
+			children = (
+				D920FC74283246C40005DC53 /* ProfileViewController.swift */,
+				D9152E912833597E001D0AAF /* ProfileHeaderView.swift */,
+			);
+			path = " Profile";
+			sourceTree = "<group>";
+		};
 		D920FC4C283243C50005DC53 = {
 			isa = PBXGroup;
 			children = (
@@ -64,13 +75,13 @@
 		D920FC57283243C50005DC53 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
+				D9152E90283358BD001D0AAF /*  Profile */,
 				D920FC58283243C50005DC53 /* AppDelegate.swift */,
-				D920FC5A283243C50005DC53 /* SceneDelegate.swift */,
 				D920FC6C2832456A0005DC53 /* FeedViewController.swift */,
+				D920FC5A283243C50005DC53 /* SceneDelegate.swift */,
 				D920FC6E283246240005DC53 /* InfoViewController.swift */,
 				D920FC70283246680005DC53 /* MainTabBarController.swift */,
 				D920FC722832469B0005DC53 /* PostViewController.swift */,
-				D920FC74283246C40005DC53 /* ProfileViewController.swift */,
 				D920FC5E283243C50005DC53 /* Main.storyboard */,
 				D920FC61283243C70005DC53 /* Assets.xcassets */,
 				D920FC63283243C70005DC53 /* LaunchScreen.storyboard */,
@@ -157,6 +168,7 @@
 				D920FC75283246C40005DC53 /* ProfileViewController.swift in Sources */,
 				D920FC6F283246240005DC53 /* InfoViewController.swift in Sources */,
 				D920FC5B283243C50005DC53 /* SceneDelegate.swift in Sources */,
+				D9152E922833597E001D0AAF /* ProfileHeaderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
