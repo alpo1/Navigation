@@ -76,7 +76,7 @@ class ProfileHeaderView: UIView {
       
       @objc private func buttonPressed() {
           userStatusTextField.text = statusText
-          newStatusTextField.text = "Enter the new status here..."
+          newStatusTextField.placeholder = "Enter the new status here..."
           self.endEditing(true)
           print("---------")
           print(statusText)
@@ -86,7 +86,7 @@ class ProfileHeaderView: UIView {
           let newStatusTextField = UITextField()
           newStatusTextField.translatesAutoresizingMaskIntoConstraints = false
           newStatusTextField.indent(size: 10)
-          newStatusTextField.text = "Enter the new status here..."
+          newStatusTextField.placeholder = "Enter the new status here..."
           newStatusTextField.textColor = .black
           newStatusTextField.font = UIFont.systemFont(ofSize: 15, weight: .regular)
           newStatusTextField.backgroundColor = .white
@@ -124,12 +124,11 @@ class ProfileHeaderView: UIView {
               newStatusTextField.heightAnchor.constraint(equalToConstant: 40),
               
               showStatusButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16.0),
-              showStatusButton.topAnchor.constraint(equalTo: userAvatarImage.bottomAnchor, constant: 46.0),
-              showStatusButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16.0),
+              showStatusButton.topAnchor.constraint(equalTo: userAvatarImage.bottomAnchor, constant: 16.0),
+              showStatusButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -32.0),
               showStatusButton.heightAnchor.constraint(equalToConstant: 50.0)
           ])
       }
-      
       private func setupView(){
           addSubview(userAvatarImage)
           addSubview(userNameLabel)
