@@ -12,28 +12,60 @@ struct Post {
 }
 
 class FeedViewController: UIViewController {
-
-    var post = Post(title: "Новая публикация")
+    var post = Post(title: "My post")
+    
     override func viewDidLoad() {
             super.viewDidLoad()
             view.backgroundColor = .systemBackground
-            makeButton()
+            setupLayout()
         }
         
-        private func makeButton() {
-            let button = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 40))
-            button.center = view.center
-            button.setTitle("К публикации", for: .normal)
-            button.backgroundColor = .systemGray
-            button.layer.cornerRadius = 4
-            button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+    private let stackView: UIStackView = {
+            let stackView = UIStackView()
+            stackView.translatesAutoresizingMaskIntoConstraints = false
+            stackView.axis = .vertical
+            stackView.spacing = 10
+            return stackView
+        }()
         
-            view.addSubview(button)
+        private lazy var firstButton: UIButton = {
+            let firstButton = UIButton()
+            firstButton.translatesAutoresizingMaskIntoConstraints = false
+            firstButton.setTitle("First button", for: .normal)
+            firstButton.backgroundColor = .systemGray
+            firstButton.layer.cornerRadius = 12
+            firstButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+            return firstButton
+        }()
+        
+        @objc func buttonAction(sender: UIButton!) {
+            self.navigationController?.pushViewController(PostViewController(), animated: true)
         }
-
-        @objc private func buttonAction() {
-            let postView = PostViewController()
-            postView.postTitle = post.title
-            navigationController?.pushViewController(postView, animated: true)
+        
+        private lazy var secondButton: UIButton = {
+            let secondButton = UIButton()
+            secondButton.translatesAutoresizingMaskIntoConstraints = false
+            secondButton.setTitle("Second button", for: .normal)
+            secondButton.backgroundColor = .systemGray
+            secondButton.layer.cornerRadius = 12
+            secondButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+            return secondButton
+        }()
+        
+        private func setupLayout() {
+            view.addSubview(stackView)
+            [firstButton, secondButton].forEach { stackView.addArrangedSubview($0) }
+            
+            NSLayoutConstraint.activate([
+                // stackView
+                stackView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+                stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+                stackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+                stackView.heightAnchor.constraint(equalToConstant: 110),
+                // firstButton
+                firstButton.heightAnchor.constraint(equalToConstant: 50),
+                // secondButton
+                secondButton.heightAnchor.constraint(equalToConstant: 50)
+            ])
         }
     }
