@@ -18,6 +18,7 @@
 		D920FC71283246680005DC53 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D920FC70283246680005DC53 /* MainTabBarController.swift */; };
 		D920FC732832469B0005DC53 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D920FC722832469B0005DC53 /* PostViewController.swift */; };
 		D920FC75283246C40005DC53 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D920FC74283246C40005DC53 /* ProfileViewController.swift */; };
+		D9494EAF2839EDD8008046E3 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9494EAE2839EDD8008046E3 /* LogInViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		D920FC70283246680005DC53 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		D920FC722832469B0005DC53 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		D920FC74283246C40005DC53 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		D9494EAE2839EDD8008046E3 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +54,7 @@
 			children = (
 				D920FC74283246C40005DC53 /* ProfileViewController.swift */,
 				D9152E912833597E001D0AAF /* ProfileHeaderView.swift */,
+				D9494EAE2839EDD8008046E3 /* LogInViewController.swift */,
 			);
 			path = " Profile";
 			sourceTree = "<group>";
@@ -163,6 +166,7 @@
 			files = (
 				D920FC732832469B0005DC53 /* PostViewController.swift in Sources */,
 				D920FC59283243C50005DC53 /* AppDelegate.swift in Sources */,
+				D9494EAF2839EDD8008046E3 /* LogInViewController.swift in Sources */,
 				D920FC6D2832456A0005DC53 /* FeedViewController.swift in Sources */,
 				D920FC71283246680005DC53 /* MainTabBarController.swift in Sources */,
 				D920FC75283246C40005DC53 /* ProfileViewController.swift in Sources */,
