@@ -64,7 +64,6 @@ class ProfileHeaderView: UIView {
         statusLabel.text = statusText
         statusTextField.text = ""
         self.endEditing(true)
-        print(statusText)
     }
     
     private lazy var statusTextField: UITextField = {
@@ -86,7 +85,6 @@ class ProfileHeaderView: UIView {
     
     @objc private func statusTextChanges() {
         statusText = statusTextField.text!
-        print("Статус изменен")
     }
     
     private func setupLayout(){
