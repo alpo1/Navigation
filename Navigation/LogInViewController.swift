@@ -24,13 +24,14 @@ class LogInViewController: UIViewController {
        
        override func viewDidLoad() {
            super.viewDidLoad()
-           self.navigationController?.isNavigationBarHidden = true
-           view.backgroundColor = .white
+           //self.navigationController?.isNavigationBarHidden = true
+          // view.backgroundColor = .white
            setupLayout()
        }
        
        override func viewWillAppear(_ animated: Bool) {
            super.viewWillAppear(animated)
+           self.navigationController?.navigationBar.isHidden = false
            notify.addObserver(self, selector: #selector(keyboardShow), name: UIResponder.keyboardWillShowNotification, object: nil)
            notify.addObserver(self, selector: #selector(keyboardHide), name: UIResponder.keyboardWillHideNotification, object: nil)
        }
@@ -117,7 +118,8 @@ class LogInViewController: UIViewController {
        
        @objc private func logInButtonAction() {
            let profileView = ProfileViewController()
-           self.navigationController?.pushViewController(profileView, animated: false)
+           self.navigationController?.pushViewController(profileView, animated: true)
+            self.navigationController?.setViewControllers([profileView], animated: true)
        }
        
        private func setupLayout() {
