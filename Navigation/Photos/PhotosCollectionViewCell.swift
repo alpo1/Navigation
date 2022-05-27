@@ -9,7 +9,7 @@ import UIKit
 
 class PhotosCollectionViewCell: UICollectionViewCell {
     
-    private var photosImageView: UIImageView = {
+    private var galleryImages: UIImageView = {
            $0.translatesAutoresizingMaskIntoConstraints = false
            $0.backgroundColor = .black
            $0.contentMode = .scaleAspectFill
@@ -27,19 +27,19 @@ class PhotosCollectionViewCell: UICollectionViewCell {
            fatalError("init(coder:) has not been implemented")
        }
        
-       func setupCell(_ photo: PhotosModel) {
-           photosImageView.image = UIImage(named: photo.image)
+    func setupCell(image: UIImage) {
+           galleryImages.image = image
            
        }
        
        private func setupLayout() {
-           contentView.addSubview(photosImageView)
+           contentView.addSubview(galleryImages)
            
            NSLayoutConstraint.activate([
-               photosImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-               photosImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-               photosImageView.widthAnchor.constraint(equalTo: contentView.widthAnchor),
-               photosImageView.heightAnchor.constraint(equalTo: contentView.heightAnchor)
+               galleryImages.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+               galleryImages.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+               galleryImages.widthAnchor.constraint(equalTo: contentView.widthAnchor),
+               galleryImages.heightAnchor.constraint(equalTo: contentView.heightAnchor)
            ])
        }
 }

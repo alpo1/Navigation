@@ -74,7 +74,7 @@ class LogInViewController: UIViewController {
     
     private lazy var userLoginTextField: UITextField = {
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.indent(size: 10)
+//        $0.indent(size: 10)
         $0.placeholder = "Email or phone"
         $0.textColor = .black
         $0.font = UIFont.systemFont(ofSize: 16, weight: .regular)
@@ -82,6 +82,7 @@ class LogInViewController: UIViewController {
         $0.backgroundColor = .systemGray6
         $0.delegate = self
         $0.addTarget(self, action: #selector(userLogin), for: .editingChanged)
+        $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: $0.frame.height))
         $0.leftViewMode = .always
         return $0
     }(UITextField())
@@ -92,7 +93,7 @@ class LogInViewController: UIViewController {
     
     private lazy var userPasswordTextField: UITextField = {
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.indent(size: 10)
+//        $0.indent(size: 10)
         $0.placeholder = "Password"
         $0.isSecureTextEntry = true
         $0.textColor = .black
@@ -101,6 +102,7 @@ class LogInViewController: UIViewController {
         $0.delegate = self
         $0.addTarget(self, action: #selector(userPassword), for: .editingChanged)
         $0.autocapitalizationType = .none
+        $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: $0.frame.height))
         $0.leftViewMode = .always
         return $0
     }(UITextField())

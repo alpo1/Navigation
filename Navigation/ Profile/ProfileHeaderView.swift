@@ -7,219 +7,202 @@
 
 import UIKit
 
-class ProfileHeaderView: UITableViewHeaderFooterView {
+class ProfileHeaderView: UIView, UITextFieldDelegate  {
     
-    override init(reuseIdentifier: String?) {
-             super.init(reuseIdentifier: reuseIdentifier)
-             setupLayout()
-             setupGestures()
+    let avatarImageView: UIImageView = {
+        let view = UIImageView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.image = UIImage(named: "kotik.jpeg")
+        view.layer.cornerRadius = 50
+        view.layer.borderWidth = 3
+        view.layer.borderColor = UIColor.white.cgColor
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
+        return view
+    }()
+    
+    let fullNameLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 18, weight: .bold)
+        label.textColor = .black
+        label.text = "Party Cat"
+        return label
+    }()
+    
+    let statusLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 14, weight: .regular)
+        label.textColor = .gray
+        label.text = "Waiting for something..."
+        return label
+    }()
+    
+    lazy var statusTextField: UITextField = {
+        let textField = UITextField()
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.backgroundColor = .systemGray6
+        textField.placeholder = "Listening to music"
+        textField.font = .systemFont(ofSize: 15, weight: .regular)
+        textField.backgroundColor = .white
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.black.cgColor
+        textField.layer.cornerRadius = 12
+        textField.addTarget(self, action: #selector(statusTextChanged), for: .editingChanged)
+        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: textField.frame.height))
+        textField.leftViewMode = .always
+        return textField
+    }()
+    
+    lazy var setStatusButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Set status", for: .normal)
+        button.backgroundColor = .blue
+        button.layer.cornerRadius = 4
+        button.layer.shadowOffset.height = 4
+        button.layer.shadowOffset.width = 4
+        button.layer.shadowRadius = 4
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.7
+        button.addTarget(self, action: #selector(pushButton), for: .touchUpInside)
+        return button
+    }()
+    
+    private var statusText: String = ""
+    
+    // Создал 4ре константы для настроек констрейнтов avatarImageView, чтобы в дальнейшем их использовать для анимации
+    private var topAvatarImageView = NSLayoutConstraint()
+    private var leadingAvatarImageView = NSLayoutConstraint()
+    private var widthAvatarImageView = NSLayoutConstraint()
+    private var heightAvatarImageView = NSLayoutConstraint()
+    
+    // Создал вью - которое будет при тапе на аватар фоном - полупрозрачным
+    private let viewUnderAvatar: UIView = {
+        let viewUnderAvatar = UIView()
+        let profileVC = ProfileViewController()
+        viewUnderAvatar.translatesAutoresizingMaskIntoConstraints = false
+        viewUnderAvatar.backgroundColor = .black
+        viewUnderAvatar.alpha = 0.0
+        viewUnderAvatar.frame = profileVC.view.frame
+        return viewUnderAvatar
+    }()
+    
+    // Создал кнопку выхода из режима увеличенного просмотра аватарки
+    private var closeProfileAvatarButton: UIButton = {
+        let closeProfileAvatarButton = UIButton()
+        closeProfileAvatarButton.translatesAutoresizingMaskIntoConstraints = false
+        closeProfileAvatarButton.setImage(UIImage(systemName: "multiply"), for: UIControl.State.normal)
+        closeProfileAvatarButton.contentMode = .scaleAspectFill
+        closeProfileAvatarButton.alpha = 0.0
+        closeProfileAvatarButton.addTarget(ProfileHeaderView.self, action: #selector(closeAction), for: .touchUpInside)
+        return closeProfileAvatarButton
+    }()
+    
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        layout()
+        setupGestures()
     }
     
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
+        fatalError("init(coder:) has not been implemented")
     }
     
-    private var statusText = String()
-    private lazy var avatarImagePosition = avatarImageView.layer.position
-    private lazy var avatarImageBounds = avatarImageView.layer.bounds
-
-    private lazy var avatarView: UIView = {
-             $0.translatesAutoresizingMaskIntoConstraints = false
-             $0.backgroundColor = .black
-             $0.isUserInteractionEnabled = false
-             $0.alpha = 0.0
-             return $0
-         }(UIView())
-     
-    private lazy var avatarImageView: UIImageView = {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.image = UIImage(named: "kotik.jpeg")
-        $0.contentMode = .scaleAspectFill
-        $0.clipsToBounds = true
-        $0.backgroundColor = .systemBackground
-        $0.layer.cornerRadius = 55
-        $0.layer.borderWidth = 3
-        $0.layer.borderColor = UIColor.white.cgColor
-        $0.isUserInteractionEnabled = true
-        return $0
-    }(UIImageView())
-    
-    private lazy var closeAvatarImageButton: UIButton = {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.setImage(UIImage(systemName: "multiply.circle", withConfiguration: UIImage.SymbolConfiguration(pointSize: 40))?.withTintColor(colorSet, renderingMode: .alwaysOriginal), for: .normal)
-            $0.alpha = 0.0
-            $0.clipsToBounds = false
-            $0.addTarget(self, action: #selector(closeAvatarAction), for: .touchUpInside)
-            $0.isUserInteractionEnabled = false
-            return $0
-        }(UIButton())
-    
-    private lazy var fullNameLabel: UILabel = {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.text = "Santa Cat"
-        $0.textColor = .black
-        $0.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        return $0
-    }(UILabel())
-    
-    private lazy var statusLabel: UILabel = {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.text = "Waiting for something..."
-        $0.textColor = .gray
-        $0.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        $0.isUserInteractionEnabled = false
-        return $0
-    }(UILabel())
-    
-    private lazy var setStatusButton: UIButton = {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.backgroundColor = colorSet
-        $0.setTitle("Set status", for: .normal)
-        $0.setTitleColor(UIColor.white, for: .normal)
-        $0.layer.cornerRadius = 10
-        $0.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-        return $0
-    }(UIButton())
-    
-    @objc private func buttonAction() {
-        statusLabel.text = statusText
-        statusTextField.text = ""
-        self.endEditing(true)
-    }
-    
-    private lazy var statusTextField: UITextField = {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.indent(size: 10)
-        $0.placeholder = "Enter the new status here..."
-        $0.textColor = .black
-        $0.font = UIFont.systemFont(ofSize: 15, weight: .regular)
-        $0.backgroundColor = .white
-        $0.layer.borderWidth = 1
-        $0.layer.borderColor = UIColor.black.cgColor
-        $0.layer.cornerRadius = 10
-        $0.delegate = self
-        $0.addTarget(self, action: #selector(statusTextChanges), for: .editingChanged)
-        return $0
-    }(UITextField())
-    
-
-    
-    @objc private func statusTextChanges() {
-        statusText = statusTextField.text!
-    }
-    
+    // настраиваем анимацию для аватарки
     private func setupGestures() {
-           let tapAvatarGesture = UITapGestureRecognizer(target: self, action: #selector(tapAvatarAction))
-           avatarImageView.addGestureRecognizer(tapAvatarGesture)
-       }
-       
-       @objc func tapAvatarAction() {
-           
-           self.avatarImagePosition = self.avatarImageView.layer.position
-                   self.avatarImageBounds = self.avatarImageView.layer.bounds
-                   
-                   UIImageView.animate(withDuration: 0.5,
-                                       animations: {
-                       self.avatarImageView.center = CGPoint(x: UIScreen.main.bounds.midX, y: (UIScreen.main.bounds.midY - ProfileViewController.tableView.contentOffset.y))
-                       self.avatarView.alpha = 0.8
-                       self.avatarImageView.layer.bounds = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
-                       self.avatarImageView.layer.cornerRadius = 0
-                       self.avatarImageView.layer.borderWidth = 0
-                       self.avatarImageView.isUserInteractionEnabled = false
-                       self.setStatusButton.isUserInteractionEnabled = false
-                       self.statusTextField.isUserInteractionEnabled = false
-                       ProfileViewController.tableView.isScrollEnabled = false
-                       ProfileViewController.tableView.cellForRow(at: IndexPath(item: 0, section: 0))?.isUserInteractionEnabled = false
-                       ProfileViewController.tableView.cellForRow(at: IndexPath(item: 0, section: 1))?.isUserInteractionEnabled = false
-                   },
-                                       completion: { _ in
-                       UIImageView.animate(withDuration: 0.3) {
-                           self.closeAvatarImageButton.alpha = 1
-                           self.closeAvatarImageButton.isUserInteractionEnabled = true
-                           self.layoutIfNeeded()
-                       }
-                   })
-               }
-       
-       @objc private func closeAvatarAction() {
-           UIView.animate(withDuration: 0.3,
-                          delay: 0.0,
-                          usingSpringWithDamping: 1.0,
-                          initialSpringVelocity: 0.0,
-                          options: .curveEaseInOut) {
-               self.closeAvatarImageButton.alpha = 0
-               self.closeAvatarImageButton.isUserInteractionEnabled = false
-           } completion: { _ in
-               UIView.animate(withDuration: 0.5,
-                              delay: 0.0) {
-                   self.avatarView.alpha = 0.0
-                   self.avatarImageView.layer.position = self.avatarImagePosition
-                   self.avatarImageView.layer.bounds = self.avatarImageBounds
-                   self.avatarImageView.layer.cornerRadius = self.avatarImageView.bounds.width / 2
-                   self.avatarImageView.layer.borderWidth = 3
-                   self.avatarImageView.isUserInteractionEnabled = true
-                   self.setStatusButton.isUserInteractionEnabled = true
-                   self.statusTextField.isUserInteractionEnabled = true
-                   ProfileViewController.tableView.isScrollEnabled = true
-                   ProfileViewController.tableView.cellForRow(at: IndexPath(item: 0, section: 0))?.isUserInteractionEnabled = true
-                   ProfileViewController.tableView.cellForRow(at: IndexPath(item: 0, section: 1))?.isUserInteractionEnabled = true
-                   self.layoutIfNeeded()
-               }
-           }
-       }
-    private func setupLayout(){
-        [fullNameLabel, statusLabel, setStatusButton, statusTextField,avatarView, avatarImageView, closeAvatarImageButton].forEach { addSubview($0) }
+        let tapGestureImage = UITapGestureRecognizer(target: self, action: #selector(tapAvatar))
+        avatarImageView.addGestureRecognizer(tapGestureImage)
+        avatarImageView.isUserInteractionEnabled = true
+    }
+    
+    private func layout() {
+        [fullNameLabel, statusLabel, statusTextField, setStatusButton, viewUnderAvatar, avatarImageView, closeProfileAvatarButton].forEach{ addSubview($0) }
         
         NSLayoutConstraint.activate([
-            avatarView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
-            avatarView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-            avatarView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            avatarView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height),
             
-            // avatarImageView
-            avatarImageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            avatarImageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
-            avatarImageView.heightAnchor.constraint(equalToConstant: 110),
-            avatarImageView.widthAnchor.constraint(equalToConstant: 110),
-            //closeAvatarImageButton
-            closeAvatarImageButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -8),
-            closeAvatarImageButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 8),
-            // fullNameLabel
-            fullNameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 16),
-            fullNameLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            fullNameLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 27),
-            // statusLabel
-            statusLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 16),
-            statusLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            statusLabel.bottomAnchor.constraint(equalTo: setStatusButton.topAnchor, constant: -64),
-            // statusTextField
-            statusTextField.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 16),
-            statusTextField.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            statusTextField.topAnchor.constraint(equalTo: statusLabel.bottomAnchor, constant: 10),
+            closeProfileAvatarButton.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            closeProfileAvatarButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            
+            fullNameLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 27),
+            fullNameLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            
+            statusLabel.topAnchor.constraint(equalTo: fullNameLabel.bottomAnchor, constant: 20),
+            statusLabel.leadingAnchor.constraint(equalTo: fullNameLabel.leadingAnchor),
+            statusLabel.bottomAnchor.constraint(equalTo: statusTextField.topAnchor, constant: -8),
+            
+            statusTextField.bottomAnchor.constraint(equalTo: setStatusButton.topAnchor, constant: -8),
+            statusTextField.leadingAnchor.constraint(equalTo: fullNameLabel.leadingAnchor),
+            statusTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             statusTextField.heightAnchor.constraint(equalToConstant: 40),
-            // setStatusButton
-            setStatusButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            setStatusButton.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 28), //
-            setStatusButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            setStatusButton.heightAnchor.constraint(equalToConstant: 50)
+            
+            setStatusButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            setStatusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            setStatusButton.heightAnchor.constraint(equalToConstant: 50),
+            setStatusButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -8)
+        ])
+        
+        // переписываю констрейнты для avatarImageView
+        topAvatarImageView = avatarImageView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 16)
+        leadingAvatarImageView = avatarImageView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 16)
+        widthAvatarImageView = avatarImageView.widthAnchor.constraint(equalToConstant: 110)
+        heightAvatarImageView = avatarImageView.heightAnchor.constraint(equalToConstant: 110)
+        
+        NSLayoutConstraint.activate([
+            topAvatarImageView,
+            leadingAvatarImageView,
+            widthAvatarImageView,
+            heightAvatarImageView
         ])
     }
-}
-
-// задаем отступ в UITextField
-extension UITextField {
-    func indent(size:CGFloat) {
-        self.leftView = UIView(frame: CGRect(x: self.frame.minX, y: self.frame.minY, width: size, height: self.frame.height))
-        self.leftViewMode = .always
+    
+    @objc func statusTextChanged(sender: UITextField) -> String {
+        statusText = statusTextField.text ?? "Waiting for something..."
+        return statusText
+    }
+    
+    @objc func pushButton(sender: UIButton) {
+        
+        // Проверка на заполнениею поле статуса
+        guard let textInField = statusTextField.text else { return }
+        if textInField.isEmpty {
+            statusTextField.shakeField()
+        } else {
+        statusLabel.text = statusText
+        }
+    }
+    
+    @objc private func tapAvatar() {
+        UIImageView.animate(withDuration: 0.5, delay: 0, options: .curveEaseIn) {
+            self.topAvatarImageView.constant = (UIScreen.main.bounds.height - UIScreen.main.bounds.width) / 3
+            self.leadingAvatarImageView.constant = 0
+            self.widthAvatarImageView.constant = UIScreen.main.bounds.width
+            self.heightAvatarImageView.constant = self.widthAvatarImageView.constant
+            self.avatarImageView.layer.cornerRadius = 0
+            self.viewUnderAvatar.alpha = 0.8
+            self.layoutIfNeeded()
+        } completion: { _ in
+            UIImageView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn){
+                self.closeProfileAvatarButton.alpha = 1
+            }
+        }
+    }
+    
+    @objc private func closeAction(){
+        UIImageView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn){
+            self.closeProfileAvatarButton.alpha = 0.0
+        } completion: { _ in
+            UIImageView.animate(withDuration: 0.5, delay: 0, options: .curveEaseIn) { [self] in
+                topAvatarImageView.constant  = 16
+                leadingAvatarImageView.constant = 16
+                widthAvatarImageView.constant  = 110
+                heightAvatarImageView.constant  = 110
+                viewUnderAvatar.alpha = 0.0
+                avatarImageView.layer.cornerRadius = 55
+                layoutIfNeeded()
+            }
+        }
     }
 }
-
-// UITextFieldDelegate
-
-extension ProfileHeaderView: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.endEditing(true)
-        return true
-    }
-}
-
